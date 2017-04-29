@@ -3,22 +3,19 @@ require_once "db.inc.php";
 echo '<?xml version="1.0" encoding="1.0" ?>';
 
 // Process in a function
-process($_GET['user'], $_GET['pw'], $_GET['pw2']);
+process($_GET['user']);
 
 /**
  * Process the query
  * @param $user the user to create if not in database
  * @param $password the password to use for the account
  */
-function process($user, $password, $password2) {
+function process($username) {
     // Connect to the database
     $pdo = pdo_connect();
 
-    if ($password != $password2) {
-        echo "<game status=\"no\" msg=\"passwords don\'t match\" />";
-        exit;
-    }
-    $userid = createUser($pdo, $user, $password);
+
+    $userid = createUser($pdo, $username);
     echo "<game status=\"yes\">";
     echo "</game>";
 }
@@ -31,19 +28,32 @@ function process($user, $password, $password2) {
  * @param $password Password
  * @return id if successful or exits if not
  */
-function createUser($pdo, $user, $password) {
+function createUser($pdo, $username) {
     // Does the user exist in the database?
-    $userQ = $pdo->quote($user);
-    $passwordQ = $pdo->quote($password);
-    $query = "SELECT id, password from connectuser where user=$userQ";
-
-
+    $userQ = $pdo->quote($username);
+    $query = "SELECT id from ctfuser where name=$userQ";
 
     $rows = $pdo->query($query);
     if (!($row = $rows->fetch())){
-        $query2 = "INSERT INTO connectuser(user, password) VALUES ($userQ,$passwordQ)";
+
+                $sql =<<<SQL
+    SELECT LastTeam from GameTable
+SQL;
+        $statement = $pdo->prepare($sql);
+        $statement->execute();
+        if($statement->rowCount() === 0) {
+            echo '<game status="no" msg="game doesn\'t exist" />';
+            return null;
+        }
+
+        $row = $statement->fetch();
+        $teamID = $row['LastTeam'] == 1 ? 2 : 1;
+        // Insert the user into the ctfuser table
+        $query2 = "INSERT INTO ctfuser(name,teamID) VALUES ($userQ,$teamID)";
         $pdo->query($query2);
-        echo "<game status=\"yes\">";
+
+        // Update the LastTeam attribute in GameTable\
+        echo "<game status=\"created user\">";
         echo "</game>";
         exit;
     }
