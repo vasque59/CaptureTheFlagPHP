@@ -48,7 +48,7 @@ SQL;
         $pdo->query($query2);
 
         // Update the LastTeam attribute in GameTable\
-        echo "<game status=\"created user\">";
+        echo "<game status=\"created user\" msg='$teamID'>";
         echo "</game>";
         exit;
     }
