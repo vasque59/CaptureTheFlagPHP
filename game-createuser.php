@@ -24,8 +24,7 @@ function process($username) {
  * Ask the database for the user ID. If the user exists, the password
  * must match.
  * @param $pdo PHP Data Object
- * @param $user The user name
- * @param $password Password
+ * @param $username The user name
  * @return id if successful or exits if not
  */
 function createUser($pdo, $username) {
@@ -41,10 +40,6 @@ function createUser($pdo, $username) {
 SQL;
         $statement = $pdo->prepare($sql);
         $statement->execute();
-        if($statement->rowCount() === 0) {
-            echo '<game status="no" msg="game doesn\'t exist" />';
-            return null;
-        }
 
         $row = $statement->fetch();
         $teamID = $row['LastTeam'] == 1 ? 2 : 1;
