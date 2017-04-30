@@ -25,7 +25,6 @@ SQL;
 
 
     $dist = distance($flagLat, $flagLong, $otherflagLat, $otherflagLong, "K") / 1000 ;
-    echo "dist: $dist";
     // If we're less than 5 meters from the other teams flag, reset their flag
     if($dist < 10){
         $sql =<<<SQL
