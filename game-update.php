@@ -3,28 +3,17 @@ require_once "db.inc.php";
 echo '<?xml version="1.0" encoding="1.0" ?>';
 
 // Process in a function
-process($_GET['gameid']);
+getStatus($_GET['flagLat'],$_GET['flagLong'],$_GET['teamid']);
 
-function process($game) {
-    // Connect to the database
+
+function getStatus($flagLat, $flagLong, $teamid) {
+//    echo "<p>$flagLat</p><p>$flagLong</p><p>$teamid</p>";
     $pdo = pdo_connect();
+    $sql =<<<SQL
+    UPDATE Team SET flagLat=$flagLat, flagLong=$flagLong WHERE id=$teamid
+SQL;
+    echo "<p>$sql</p>";
+    $statement = $pdo->prepare($sql);
+    $statement->execute();
 
-    getStatus($pdo, $game);
-}
-
-function getStatus($pdo, $game) {
-    // parse the XML from the database to check if
-    // turn number == this user id
-    // if it is, echo <game status="yes">
-    // else echo <game status="no">
-
-    $gameQ = $pdo->quote($game);
-    $query = "SELECT gamestatus from connectgame where id=$gameQ";
-
-    $rows = $pdo->query($query);
-    if($row = $rows->fetch()) {
-        echo $row['gamestatus'];
-    } else {
-        echo '<connectgame status="invalid" turn="0"/>';
-    }
 }
