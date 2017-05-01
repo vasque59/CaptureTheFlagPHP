@@ -8,7 +8,7 @@ function process($teamid) {
     $pdo = pdo_connect();
 
     $sql =<<<SQL
-    SELECT points from Team where id=$teamid
+    SELECT points from Team where color=$teamid
 SQL;
     $statement = $pdo->prepare($sql);
     $statement->execute();

@@ -33,6 +33,7 @@ function createUser($pdo, $username) {
     $query = "SELECT id from ctfuser where name=$userQ";
 
     $rows = $pdo->query($query);
+    $teamID = 1;
     if (!($row = $rows->fetch())){
 
                 $sql =<<<SQL
@@ -51,8 +52,7 @@ SQL;
         $pdo->query($query3);
 
         // Update the LastTeam attribute in GameTable\
-        echo "<game status=\"created user\" msg='$teamID'>";
-        echo "</game>";
+        echo "<game status=\"created user\" msg='$teamID' />";
         exit;
     }
 

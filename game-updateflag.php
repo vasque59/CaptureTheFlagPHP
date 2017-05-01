@@ -9,7 +9,7 @@ function updateFlagLoc($flagLat, $flagLong, $teamid) {
 //    echo "<p>$flagLat</p><p>$flagLong</p><p>$teamid</p>";
     $pdo = pdo_connect();
     $sql =<<<SQL
-    UPDATE Team SET flagLat=$flagLat, flagLong=$flagLong WHERE id=$teamid
+    UPDATE Team SET flagLat=$flagLat, flagLong=$flagLong WHERE color=$teamid
 SQL;
     $statement = $pdo->prepare($sql);
     $statement->execute();

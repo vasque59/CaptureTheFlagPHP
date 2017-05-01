@@ -14,7 +14,7 @@ function resetFlag($flagLat, $flagLong,$resetFlagLat, $resetFlagLong, $teamid) {
     $otherTeamId = $teamid == 1 ? 2 : 1;
     // Grab the other teams flag location
     $sql =<<<SQL
-    SELECT flagLat, flagLong from Team where id=$otherTeamId
+    SELECT flagLat, flagLong from Team where color=$otherTeamId
 SQL;
     $statement = $pdo->prepare($sql);
     $statement->execute();
@@ -28,7 +28,7 @@ SQL;
     // If we're less than 5 meters from the other teams flag, reset their flag
     if($dist < 10){
         $sql =<<<SQL
-    UPDATE Team SET flagLat=$flagLat, flagLong=$flagLong, isFlagPickedUp=0 WHERE id=$otherTeamId
+    UPDATE Team SET flagLat=$flagLat, flagLong=$flagLong, isFlagPickedUp=0 WHERE color=$otherTeamId
 SQL;
         $statement = $pdo->prepare($sql);
         $statement->execute();
