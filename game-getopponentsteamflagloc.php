@@ -10,19 +10,22 @@ function getOtherTeamFlagLoc($teamid) {
 
     // Grab the other teams id
     $otherTeamId = $teamid == 1 ? 2 : 1;
-
     // Grab the other teams flag location
     $sql =<<<SQL
-    SELECT flagLat, flagLong from Team where id=$otherTeamId
+    SELECT flagLat, flagLong from Team where color=$otherTeamId
 SQL;
     $statement = $pdo->prepare($sql);
     $statement->execute();
-
-    $row = $otherflagLat = $statement->fetch();
-    $otherflagLat = $row['flagLat'];
-    $otherflagLong = $row['flagLong'];
-    //Return the other teams flags lat and long
-    echo '<game status="yes" msg="' . $otherflagLat . ',' . $otherflagLong . '"/>';
-    exit;
-
+    if($statement->rowCount() != 0){
+        $row = $statement->fetch();
+        $otherflagLat = $row['flagLat'];
+        $otherflagLong = $row['flagLong'];
+        echo $otherflagLong;
+        //Return the other teams flags lat and long
+        echo '<game status="yes" lat="' . $otherflagLat . '" long="' . $otherflagLong . '"/>';
+    }
+    else
+    {
+        echo '<game status="no" msg="flag could not be found" />';
+    }
 }
