@@ -43,9 +43,11 @@ SQL;
 
         $row = $statement->fetch();
         $teamID = $row['LastTeam'] == 1 ? 2 : 1;
-        // Insert the user into the ctfuser table
-        $query2 = "INSERT INTO ctfuser(name,teamID) VALUES ($userQ,$teamID)";
+        $query2 = "UPDATE GameTable SET LastTeam=$teamID";
         $pdo->query($query2);
+        // Insert the user into the ctfuser table
+        $query3 = "INSERT INTO ctfuser(name,teamID) VALUES ($userQ,$teamID)";
+        $pdo->query($query3);
 
         // Update the LastTeam attribute in GameTable\
         echo "<game status=\"created user\" msg='$teamID'>";
