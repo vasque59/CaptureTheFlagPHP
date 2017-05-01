@@ -43,10 +43,14 @@ SQL;
         $statement->execute();
 
         $row = $statement->fetch();
-        $teamID = $row['LastTeam'] == 1 ? 2 : 1;
-        $teamID = $teamID != 1 && $teamID != 2 ? 1 : $teamID;
-        $query2 = "UPDATE GameTable SET LastTeam=$teamID";
-        $pdo->query($query2);
+        if($statement->rowCount() == 0){
+            $teamID = 2;
+        }
+        else{
+            $teamID = $row['LastTeam'] == 1 ? 2 : 1;
+            $query2 = "UPDATE GameTable SET LastTeam=$teamID";
+            $pdo->query($query2);
+        }
         // Insert the user into the ctfuser table
         $query3 = "INSERT INTO ctfuser(name,teamID) VALUES ($userQ,$teamID)";
         $pdo->query($query3);
