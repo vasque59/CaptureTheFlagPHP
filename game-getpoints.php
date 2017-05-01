@@ -13,7 +13,6 @@ SQL;
     $statement = $pdo->prepare($sql);
     $statement->execute();
     $points = $statement->fetch()['points'];
-    echo $points;
     echo '<game status="yes" msg="' . $points . '"/>';
     exit;
 
