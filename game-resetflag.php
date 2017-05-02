@@ -22,11 +22,11 @@ SQL;
     $row = $otherflagLat = $statement->fetch();
     $otherflagLat = $row['flagLat'];
     $otherflagLong = $row['flagLong'];
-
+    $numOfFeetWithin = 120;
 
     $dist = distance($flagLat, $flagLong, $otherflagLat, $otherflagLong, "K") / 1000 ;
     // If we're less than 5 meters from the other teams flag, reset their flag
-    if($dist < 10){
+    if($dist < $numOfFeetWithin){
         $sql =<<<SQL
     UPDATE Team SET flagLat=$flagLat, flagLong=$flagLong, isFlagPickedUp=0 WHERE color=$otherTeamId
 SQL;
